@@ -1068,6 +1068,7 @@ html[dir="rtl"] .premium-manage.banner > *:first-child
 body[data-tab|="general"] #content-general,
 body[data-tab|="advanced"] #content-advanced,
 body[data-tab|="allowlist"] #content-allowlist,
+body[data-tab|="lightning"] #content-lightning,
 body[data-tab|="help"] #content-help
 {
   display: block;
@@ -1702,13 +1703,15 @@ html[data-application="opera"] #language-recommend
   Allowlist tab
  */
 
-#content-allowlist form
+#content-allowlist form,
+#content-lightning form
 {
   display: flex;
   margin-bottom: 1.4rem;
 }
 
-#content-allowlist form input
+#content-allowlist form input,
+#content-lightning form input
 {
   padding: 0.5rem 1rem;
   border: 2px solid #0797E1;
@@ -1717,12 +1720,14 @@ html[data-application="opera"] #language-recommend
   flex: 1;
 }
 
-html:not([dir="rtl"]) #content-allowlist form button
+html:not([dir="rtl"]) #content-allowlist form button,
+html:not([dir="rtl"]) #content-lightning form button
 {
   margin-left: 0.7rem;
 }
 
-html[dir="rtl"] #content-allowlist form button
+html[dir="rtl"] #content-allowlist form button,
+html[dir="rtl"] #content-lightning form button
 {
   margin-right: 0.7rem;
 }
@@ -1817,6 +1822,19 @@ html[dir="rtl"] #all-filter-lists-table li.show-message .message.error::before
 #all-filter-lists-table
 {
   margin-bottom: 0.8rem;
+}
+
+/*
+  Lightning tab content
+*/
+
+.nwc-input-title + .required-asterisk {
+  color: #ff0000;
+  font-weight: 700;
+  margin-left: 0.2rem;
+  font-size: 1.2rem;
+  line-height: 1.2rem;
+  vertical-align: middle;
 }
 
 /*

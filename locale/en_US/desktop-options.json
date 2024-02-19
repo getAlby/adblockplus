@@ -43,6 +43,10 @@
     "description": "Sidebar tab label and main heading inside corresponding tab",
     "message": "Advanced"
   },
+  "options_tab_lightning": {
+    "description": "Sidebar tab label and main heading inside corresponding tab",
+    "message": "Lightning"
+  },
   "options_tab_help": {
     "description": "Sidebar tab label",
     "message": "Help"
@@ -250,6 +254,18 @@
   "options_allowlist_empty_2": {
     "description": "https://gitlab.com/eyeo/specs/spec/-/blob/6a6fb785b6a703c5fe77e7109ddf3f6b3ee22787/spec/abp/desktop-settings/allowlist-tab.md#empty-allowlist-placeholder",
     "message": "Websites you trust and want to allow ads on will be shown here."
+  },
+  "options_lightning_description": {
+    "description": "Lightning feature description",
+    "message": "Save your \"NWC pairing secret\" to enable Lightning feature."
+  },
+  "options_lightning_nwc_title": {
+    "description": "NWC pairing secret input field title",
+    "message": "NWC pairing secret"
+  },
+  "options_lightning_save": {
+    "description": "Save button label for NWC pairing secret",
+    "message": "Save"
   },
   "options_advanced_description": {
     "description": "Advanced tab description",

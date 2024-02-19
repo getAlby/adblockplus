@@ -49,6 +49,9 @@
               <a id="tab-advanced" href="#advanced" data-i18n="options_tab_advanced" role="tab" tabindex="-1" aria-controls="content-advanced"></a>
             </li>
             <li role="presentation">
+              <a id="tab-lightning" href="#lightning" data-i18n="options_tab_lightning" role="tab" tabindex="-1" aria-controls="content-lightning"></a>
+            </li>
+            <li role="presentation">
               <a id="tab-help" href="#help" data-i18n="options_tab_help" role="tab" tabindex="-1" aria-controls="content-help"></a>
             </li>
           </ul>
@@ -375,6 +378,30 @@
               <span data-i18n="options_data_collection_opt_out_label"></span>
             </li>
           </ul>
+        </section>
+      </div>
+
+      <!-- Lightning tab content -->
+      <div id="content-lightning" role="tabpanel" aria-labelledby="tab-lightning">
+        <header>
+          <h1 data-i18n="options_tab_lightning"></h1>
+          <p>
+            <span data-i18n="options_lightning_description"></span>
+            <a data-i18n="options_learn_more" data-doclink="lightning"></a>
+          </p>
+        </header>
+        <section>
+          <h3>
+            <span data-i18n="options_lightning_nwc_title" class="nwc-input-title"></span><span class="required-asterisk">*</span>
+          </h3>
+          <form>
+            <input id="lightning-nwc-textbox" type="text" required>
+            <button id="lightning-nwc-save-button"
+                    type="submit"
+                    data-action="save-nwc-secret"
+                    data-i18n="options_lightning_save" class="primary" disabled>
+            </button>
+          </form>
         </section>
       </div>
 

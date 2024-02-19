@@ -960,6 +960,9 @@ function execAction(action, element)
         key: findParentData(element, "pref", false)
       });
       return true;
+    case "save-nwc-secret":
+      saveNwcSecret();
+      return true;
     case "toggle-remove-subscription":
       const subscriptionUrl = findParentData(element, "access", false);
       if (element.getAttribute("aria-checked") == "true")
@@ -1311,6 +1314,19 @@ function onDOMLoaded()
     setElementLinks("custom-filters-description", link);
   });
 
+  // Lightning tab
+  getPref("nwc_pairing_secret")
+    .then((secret) => {
+      if (!secret) return;
+      $("#lightning-nwc-textbox").value = secret;
+    });
+  
+  document.body.addEventListener("keyup", onKeyUp, false);
+  $("#lightning-nwc-textbox").addEventListener("keyup", (e) =>
+  {
+    $("#lightning-nwc-save-button").disabled = !e.target.value;
+  }, false);
+
   // Help tab
   getDoclink("help_center_abp_en").then(link =>
   {
@@ -1401,6 +1417,17 @@ function closeDialog()
   dialog.removeAttribute("aria-labelledby");
   document.body.removeAttribute("data-dialog");
   focusedBeforeDialog.focus();
+}
+
+function saveNwcSecret()
+{
+  const secret = $("#lightning-nwc-textbox");
+  const value = secret.value.trim();
+
+  if (!value)
+    return;
+
+  browser.runtime.sendMessage({type: "prefs.set", key: "nwc_pairing_secret", value});
 }
 
 function showNotification(text, kind)

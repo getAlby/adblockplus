@@ -294,6 +294,9 @@
   "options_tab_advanced": {
     "message": "Advanced"
   },
+  "options_tab_lightning": {
+    "message": "Lightning"
+  },
   "options_tab_general": {
     "message": "General"
   },
