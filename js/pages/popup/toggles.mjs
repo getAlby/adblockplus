@@ -16,7 +16,7 @@
  */
 
 import {$} from "../../dom.mjs";
-import {isTabAllowlisted} from "./utils.mjs";
+import {getPref, setPref, isTabAllowlisted} from "./utils.mjs";
 
 // remember initial state to better toggle content
 let toggleChecked;
@@ -25,6 +25,7 @@ function setupToggles(tab)
 {
   const domain = $("#page-status .domain io-circle-toggle");
   const page = $("#page-status .page io-circle-toggle");
+  const lightning = $("#lightning io-circle-toggle");
 
   domain.addEventListener("click", () =>
   {
@@ -88,6 +89,17 @@ function setupToggles(tab)
       singlePage: true,
       tab
     });
+  });
+
+  getPref("lightning_enabled").then((enabled) =>
+  {
+    lightning.setState({checked: enabled}, enabled);
+    lightning.checked = enabled;
+  });
+
+  lightning.addEventListener("change", () =>
+  {
+    setPref("lightning_enabled", lightning.checked);
   });
 }
 

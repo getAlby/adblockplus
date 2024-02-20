@@ -60,5 +60,8 @@
   },
   "status_page": {
     "message": "This page:"
+  },
+  "lightning_header": {
+    "message": "Enable Lightning"
   }
 }

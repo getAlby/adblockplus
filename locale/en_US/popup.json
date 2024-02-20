@@ -19,6 +19,10 @@
     "description": "https://gitlab.com/eyeo/specs/spec/blob/241afce65629c742cfdf6456c06dfcb12f569163/spec/abp/popup.md#toggle",
     "message": "This page:"
   },
+  "lightning_header": {
+    "description": "Lightning toggle header",
+    "message": "Enable Lightning"
+  },
   "block_element_description": {
     "description": "https://gitlab.com/eyeo/specs/spec/blob/5a876713adebe79842be51ad6e287b1c675e023a/spec/abp/popup.md#block-element",
     "message": "Block specific element on this website"
