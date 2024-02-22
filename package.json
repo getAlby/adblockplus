@@ -96,7 +96,7 @@
     "handlebars": "4.7.6",
     "hyperhtml-element": "3.15.2",
     "merge-stream": "2.0.0",
-    "nostr-tools": "2.3.1",
+    "nostr-tools": "^1.17.0",
     "npm-dollar": "2.2.1",
     "source-map-loader": "4.0.1",
     "style-loader": "3.3.3",

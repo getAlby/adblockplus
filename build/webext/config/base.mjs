@@ -64,8 +64,12 @@ export default {
         src: ["js/pages/issue-reporter/index.mjs"]
       },
       {
+        dest: "lightning.preload.js",
+        src: ["src/lightning/content/index.ts"]
+      },
+      {
         dest: "lightning.injected.js",
-        src: ["src/lightning/content/injected.js"]
+        src: ["src/lightning/content/injected.ts"]
       },
       {
         dest: "onpage-dialog.postload.js",

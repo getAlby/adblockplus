@@ -314,6 +314,20 @@ defaults.ytWallDetection_dialog_interacted = false;
 defaults.ytWallDetection_dialog_url = "https://adblockplus.org/youtube";
 
 /**
+ * Whether the Lightning feature is enabled
+ *
+ * @type {boolean}
+ */
+defaults.lightning_enabled = false;
+
+/**
+ * Lightning feature NWC pairing secret
+ *
+ * @type {string}
+ */
+defaults.nwc_pairing_secret = "";
+
+/**
  * Map of on-page dialog timing configurations
  *
  * @see src/onpage-dialog/background/middleware/ipm-onpage-dialog.types.ts

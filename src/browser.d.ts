@@ -22,4 +22,7 @@ declare global {
    * Global web extension API
    */
   const browser: Browser.Browser;
+  interface Window {
+    webln: any;
+  }
 }

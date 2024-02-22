@@ -31,5 +31,8 @@
     "webNavigation",
     "webRequest",
     "webRequestBlocking"
+  ],
+  "web_accessible_resources": [
+    "lightning.injected.js"
   ]
 }

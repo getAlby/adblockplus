@@ -16,7 +16,8 @@
         "ext/common.js",
         "ext/content.js",
         "composer.preload.js",
-        "bypass.preload.js"
+        "bypass.preload.js",
+        "lightning.preload.js"
       ],
       "match_about_blank": true,
       "matches": [
@@ -24,19 +25,6 @@
         "https://*/*"
       ],
       "run_at": "document_start"
-    },
-    {
-      "all_frames": true,
-      "js": [
-        "lightning.injected.js"
-      ],
-      "match_about_blank": true,
-      "matches": [
-        "http://*/*",
-        "https://*/*"
-      ],
-      "run_at": "document_start",
-      "world": "MAIN"
     },
     {
       "js": [
