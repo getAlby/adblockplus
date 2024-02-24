@@ -2,6 +2,7 @@ import { PromiseQueue } from "./promiseQueue";
 // global queue object
 const queue = new PromiseQueue();
 
+// post a message from the inpage context to the content script
 export function postMessage<T>(
   scope: string,
   action: string,
@@ -17,9 +18,9 @@ export function postMessage<T>(
         window.postMessage(
           {
             id: id,
-            application: "Adblocker Plus",
+            application: "AdblockPlus",
             prompt: true,
-            action: `${scope}/${action}`,
+            action: `${action}`,
             scope: scope,
             args
           },
@@ -33,20 +34,19 @@ export function postMessage<T>(
             messageEvent.origin !== window.location.origin ||
             !messageEvent.data ||
             !messageEvent.data.response ||
-            messageEvent.data.application !== "Adblocker Plus" ||
+            messageEvent.data.application !== "AdblockPlus" ||
             messageEvent.data.scope !== scope ||
             messageEvent.data.id !== id
           ) {
             return;
           }
 
-          if (messageEvent.data.data.error) {
-            reject(new Error(messageEvent.data.data.error));
+          if (messageEvent.data.error) {
+            reject(new Error(messageEvent.data.error));
           } else {
             // 1. data: the message data
             // 2. data: the data passed as data to the message
-            // 3. data: the actual response data
-            resolve(messageEvent.data.data.data);
+            resolve(messageEvent.data.data);
           }
 
           // For some reason must happen only at the end of this function

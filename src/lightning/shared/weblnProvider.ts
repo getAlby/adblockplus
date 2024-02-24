@@ -38,35 +38,24 @@ export default class WebLNProvider {
     }
   }
 
-  execute(
-    action: string,
-    args?: Record<string, unknown>
-  ): Promise<Record<string, unknown>> {
-    return postMessage(this._scope, action, args);
-  }
-
   getInfo() {
     this._checkEnabled("getInfo");
     return this.execute("getInfo");
   }
 
-  lnurl(lnurlEncoded: string) {
-    this._checkEnabled("lnurl");
-    return this.execute("lnurl", { lnurlEncoded });
-  }
-
   sendPayment(paymentRequest: string) {
     this._checkEnabled("sendPayment");
-    return this.execute("sendPaymentOrPrompt", { paymentRequest });
+    return this.execute("sendPayment", { paymentRequest });
   }
+
   sendPaymentAsync(paymentRequest: string) {
     this._checkEnabled("sendPaymentAsync");
-    return this.execute("sendPaymentAsyncWithPrompt", { paymentRequest });
+    return this.execute("sendPaymentAsync", { paymentRequest });
   }
 
   keysend(args: KeysendArgs) {
     this._checkEnabled("keysend");
-    return this.execute("keysendOrPrompt", args);
+    return this.execute("keysend", args);
   }
 
   makeInvoice(args: string | number | RequestInvoiceArgs) {
@@ -78,28 +67,31 @@ export default class WebLNProvider {
     return this.execute("makeInvoice", args);
   }
 
-  signMessage(message: string) {
+  signMessage(_message: string) {
     this._checkEnabled("signMessage");
-
-    return this.execute("signMessageOrPrompt", { message });
+    throw new Error("Not supported `signMessage`");
   }
 
-  verifyMessage(signature: string, message: string) {
+  verifyMessage(_signature: string, _message: string) {
     this._checkEnabled("verifyMessage");
-    throw new Error("Alby does not support `verifyMessage`");
+    throw new Error("Not supported `verifyMessage`");
   }
 
   getBalance() {
     this._checkEnabled("getBalance");
-    return this.execute("getBalanceOrPrompt");
+    return this.execute("getBalance");
   }
 
-  request(method: string, params: Record<string, unknown>) {
+  request(_method: string, _params: Record<string, unknown>) {
     this._checkEnabled("request");
-
-    return this.execute("request", {
-      method,
-      params
-    });
+    throw new Error("Not supported `request`");
   }
+
+  private execute(
+    action: string,
+    args?: Record<string, unknown>
+  ): Promise<Record<string, unknown>> {
+    return postMessage(this._scope, action, args);
+  }
+
 }

@@ -1,52 +1,44 @@
-import { webln as weblnImport } from "./js-sdk";
+// TODO: use proper SDK - for which currently the gulp process fails because of some `events` imports
+import { webln as weblnImport } from "./alby-sdk";
 const webln: { [key: string]: any } = weblnImport;
 
 // WebLN calls that can be executed from the WebLNProvider.
 // Update when new calls are added
 const weblnCalls = [
-  "webln/enable",
-  "webln/getInfo",
-  "webln/lnurl",
-  "webln/sendPaymentOrPrompt",
-  "webln/sendPaymentAsyncWithPrompt",
-  "webln/keysendOrPrompt",
-  "webln/makeInvoice",
-  "webln/signMessageOrPrompt",
-  "webln/getBalanceOrPrompt",
-  "webln/request",
-  "webln/on",
-  "webln/emit",
-  "webln/off",
-  "webln/isEnabled"
+  "enable", "isEnabled", "getInfo", "sendPayment", "makeInvoice", "keysend"
 ];
 // calls that can be executed when webln is not enabled for the current content page
-const disabledCalls = ["webln/enable", "webln/isEnabled"];
+const disabledCalls = ["enable", "isEnabled"];
 
-let isEnabled = false; // store if webln is enabled for this content page
+let isEnabled = true; // store if webln is enabled for this content page
 let isRejected = false; // store if the webln enable call failed. if so we do not prompt again
 let nwc: any;
 
 async function init() {
-  injectWebln();
+  const lightningEnabled = await browser.runtime.sendMessage({
+    type: "lightning.enabled"
+  });
+  if (!lightningEnabled) {
+    return;
+  }
+  const secret = await browser.runtime.sendMessage({
+    type: "lightning.secret"
+  });
+  if (!secret) {
+    return;
+  }
 
-  browser.runtime.onMessage.addListener((request) => {
-    // extract LN data from websites
-    if (request.action === "accountChanged" && isEnabled) {
-      window.postMessage(
-        { action: "accountChanged", scope: "webln" },
-        window.location.origin
-      );
-    }
+  nwc = new webln.NostrWebLNProvider({
+    nostrWalletConnectUrl: secret
   });
 
-  // message listener to listen to inpage webln/webbtc calls
-  // those calls get passed on to the background script
-  // (the inpage script can not do that directly, but only the inpage script can make webln available to the page)
+  injectWebln();
+
   window.addEventListener("message", async (ev) => {
     // Only accept messages from the current window
     if (
       ev.source !== window ||
-      ev.data.application !== "Adblocker Plus" ||
+      ev.data.application !== "AdblockPlus" ||
       ev.data.scope !== "webln"
     ) {
       return;
@@ -73,8 +65,8 @@ async function init() {
 
       const replyFunction = (response: any) => {
         // if it is the enable call we store if webln is enabled for this content script
-        if (ev.data.action === "webln/enable") {
-          isEnabled = response.data?.enabled;
+        if (ev.data.action === "enable") {
+          isEnabled = response.enabled;
           const enabledEvent = new Event("webln:enabled");
           window.dispatchEvent(enabledEvent);
           if (response.error) {
@@ -84,9 +76,6 @@ async function init() {
           }
         }
 
-        if (ev.data.action === "webln/isEnabled") {
-          isEnabled = response.data?.isEnabled;
-        }
         postMessage(ev, response);
       };
       return exec(ev.data.action, ev.data.args)
@@ -118,7 +107,7 @@ function postMessage(ev: MessageEvent, response: any) {
   window.postMessage(
     {
       id: ev.data.id,
-      application: "Adblocker Plus",
+      application: "AdblockPlus",
       response: true,
       data: response,
       scope: "webln"
@@ -128,31 +117,17 @@ function postMessage(ev: MessageEvent, response: any) {
 }
 
 async function exec(action: string, args: any) {
-  const lightningEnabled = await browser.runtime.sendMessage({
-    type: "lightning.enabled"
-  });
-  if (!lightningEnabled) {
-    throw new Error("Lightning is not enabled");
-  }
-
   if (!nwc) {
-    const secret = await browser.runtime.sendMessage({
-      type: "lightning.secret"
-    });
-    if (!secret) {
-      throw new Error("No pairing secret");
-    }
-
-    nwc = new webln.NostrWebLNProvider({
-      nostrWalletConnectUrl: secret
-    });
+    throw new Error("No NWC instance");
   }
 
-  console.log("NWC client", nwc);
-
-  if (action === "webln/enable") {
+  if (action === "enable") {
     await nwc.enable();
-    return { data: { enabled: true } };
+    return { enabled: true };
+  } else if (action === "sendPayment") {
+    return await nwc.sendPayment(args.paymentRequest)
+  } else if (action === "sendPaymentAsync") {
+    return await nwc.sendPaymentAsync(args.paymentRequest);
   } else if (nwc[action]) {
     return await nwc[action](args);
   } else {
