@@ -79,6 +79,7 @@ activeTab.then(tab =>
   const defaultDetails = {hostname: "", pathname: "", search: ""};
   const {hostname, pathname, search} = url ? new URL(url) : defaultDetails;
   $("#blocking-domain").textContent = hostname;
+  $("#lightning-domain").textContent = hostname;
   let pageContent = pathname;
   if (!search.includes("&"))
   {

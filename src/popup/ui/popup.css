@@ -432,7 +432,7 @@ h2
 }
 
 #page-status .domain,
-#lightning
+#page-status .lightning
 {
   --toggle-width: 50px;
 }
@@ -444,7 +444,7 @@ h2
 
 #page-status .domain io-circle-toggle,
 #page-status .page io-circle-toggle,
-#lightning io-circle-toggle
+#page-status .lightning io-circle-toggle
 {
   width: var(--toggle-width);
 }
@@ -460,24 +460,15 @@ h2
   padding: 1em 0;
 }
 
-#page-status .page
+#page-status .page,
+#page-status .lightning
 {
-  margin-bottom: var(--margin-primary);
+  margin-bottom: var(--margin-primary-half);
 }
 
 #page-status .page .details
 {
   padding: 1em var(--padding-primary);
-}
-
-#lightning {
-  display: flex;
-  align-items: center;
-  gap: 0.5em;
-}
-
-#lightning h2 {
-  margin-top: -4px;
 }
 
 html:not([dir="rtl"]) #page-status .page

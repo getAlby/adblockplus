@@ -25,7 +25,7 @@ function setupToggles(tab)
 {
   const domain = $("#page-status .domain io-circle-toggle");
   const page = $("#page-status .page io-circle-toggle");
-  const lightning = $("#lightning io-circle-toggle");
+  const lightning = $("#page-status .lightning io-circle-toggle");
 
   domain.addEventListener("click", () =>
   {
