@@ -1428,6 +1428,8 @@ function saveNwcSecret()
     return;
 
   browser.runtime.sendMessage({type: "prefs.set", key: "nwc_pairing_secret", value});
+  const text = getMessage("options_lightning_notification");
+  showNotification(text, "info");
 }
 
 function showNotification(text, kind)

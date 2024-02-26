@@ -5,7 +5,12 @@ const webln: { [key: string]: any } = weblnImport;
 // WebLN calls that can be executed from the WebLNProvider.
 // Update when new calls are added
 const weblnCalls = [
-  "enable", "isEnabled", "getInfo", "sendPayment", "makeInvoice", "keysend"
+  "enable",
+  "isEnabled",
+  "getInfo",
+  "sendPayment",
+  "makeInvoice",
+  "keysend"
 ];
 // calls that can be executed when webln is not enabled for the current content page
 const disabledCalls = ["enable", "isEnabled"];
@@ -63,6 +68,8 @@ async function init() {
         return;
       }
 
+      injectLoaderElement(true);
+
       const replyFunction = (response: any) => {
         // if it is the enable call we store if webln is enabled for this content script
         if (ev.data.action === "enable") {
@@ -77,6 +84,8 @@ async function init() {
         }
 
         postMessage(ev, response);
+
+        injectLoaderElement(false);
       };
       return exec(ev.data.action, ev.data.args)
         .then(replyFunction)
@@ -125,7 +134,7 @@ async function exec(action: string, args: any) {
     await nwc.enable();
     return { enabled: true };
   } else if (action === "sendPayment") {
-    return await nwc.sendPayment(args.paymentRequest)
+    return await nwc.sendPayment(args.paymentRequest);
   } else if (action === "sendPaymentAsync") {
     return await nwc.sendPaymentAsync(args.paymentRequest);
   } else if (nwc[action]) {
@@ -133,6 +142,66 @@ async function exec(action: string, args: any) {
   } else {
     throw new Error("Method not found");
   }
+}
+
+function injectLoaderElement(display: boolean) {
+  const existingLoaderStyle = document.getElementById(
+    "__abp-lightning-loader-style"
+  );
+  const existingLoader = document.getElementById("__abp-lightning-loader");
+  if (display === false) {
+    existingLoader?.remove();
+    return;
+  } else if (existingLoader) {
+    return;
+  }
+
+  if (!existingLoaderStyle) {
+    const style = document.createElement("style");
+    style.id = "__abp-lightning-loader-style";
+    style.innerHTML = `
+      @keyframes rotateAnimation {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      #__abp-lightning-loader {
+        position: fixed;
+        top: 25px;
+        right: 25px;
+        width: 40px;
+        height: 40px;
+        background: white;
+        z-index: 99999;
+        border: 1px solid black;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      #__abp-lightning-loader span {
+        display: inline-block;
+        font-size: 24px;
+        line-height: 24px;
+        animation: rotateAnimation 1.5s infinite linear;
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  const loader = document.createElement("div");
+  loader.id = "__abp-lightning-loader";
+
+  const spinner = document.createElement("span");
+  spinner.innerText = "⚡";
+
+  loader.appendChild(spinner);
+  document.body.appendChild(loader);
 }
 
 export {};
