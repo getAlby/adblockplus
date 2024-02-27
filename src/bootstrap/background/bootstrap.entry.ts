@@ -39,6 +39,7 @@ import { start as startPremiumSubscriptions } from "../../premium-subscriptions/
 import { start as startReadyState } from "../../testing/ready-state/background";
 import { start as startYTWallDetection } from "../../yt-wall-detection/background";
 import { start as startLightning } from "../../lightning/background";
+import { start as startLightningFiltering } from "../../../adblockpluschrome/lib/lightning.js";
 
 async function bootstrap(): Promise<void> {
   startTabSessionStorage();
@@ -63,6 +64,7 @@ async function bootstrap(): Promise<void> {
   startPremiumSubscriptions();
   startYTWallDetection();
   startLightning();
+  startLightningFiltering();
 }
 
 void bootstrap();
