@@ -3,7 +3,6 @@ import { port } from "../../../adblockpluschrome/lib/messaging/port";
 import { type Message } from "../../core/api/shared";
 
 const prefMap = {
-  "lightning.enabled": "lightning_enabled",
   "lightning.secret": "nwc_pairing_secret"
 } as { [key: string]: string };
 
@@ -20,10 +19,12 @@ function handleMessage(message: Message): any {
  * Initializes Lightning feature
  */
 export function start(): void {
-  port.on("lightning.enabled", handleMessage);
   port.on("lightning.secret", handleMessage);
 
-  ext.addTrustedMessageTypes(null, ["lightning.enabled", "lightning.secret"]);
+  ext.addTrustedMessageTypes(null, [
+    "lightning.isAllowlisted",
+    "lightning.secret"
+  ]);
 }
 
 start();

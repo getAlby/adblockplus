@@ -102,7 +102,7 @@ function setupToggles(tab)
 
   lightning.addEventListener("change", () =>
   {
-    document.body.classList.toggle("refresh", lightningChecked !== lightning.checked);
+    //document.body.classList.toggle("refresh", lightningChecked !== lightning.checked);
     browser.runtime.sendMessage({
       type: "lightning.allowlist",
       origin: "popup",

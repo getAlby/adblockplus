@@ -33,6 +33,19 @@ async function setAllowlistedLightningFilters(host, toAdd) {
   }
 
   chrome.storage.local.set({ "abp:pref:lightning_filters": filters });
+
+  const tabs = await browser.tabs.query({});
+  for (let tab of tabs) {
+    const page = new ext.Page(tab);
+    if (!page.url || !(page.url instanceof URL)) continue;
+
+    const tabHost = page.url.hostname.replace(/^www\./, "");
+    if (tabHost === host)
+      browser.tabs.sendMessage(tab.id, {
+        type: "lightning.allowlistUpdated",
+        enabled: toAdd
+      });
+  }
 }
 
 export function start() {
@@ -45,13 +58,15 @@ export function start() {
    * @returns {boolean}
    */
   port.on("lightning.isAllowlisted", async (message) => {
-    const page = new ext.Page(message.tab);
+    let host = message.hostname && message.hostname.replace(/^www\./, "");
+    if (!host) {
+      const page = new ext.Page(message.tab);
 
-    if (!page.url || !(page.url instanceof URL)) {
-      return false;
+      if (!page.url || !(page.url instanceof URL)) return false;
+
+      host = page.url.hostname.replace(/^www\./, "");
     }
 
-    const host = page.url.hostname.replace(/^www\./, "");
     const filters = await getAllowlistedLightningFilters();
 
     return filters.includes(host);
