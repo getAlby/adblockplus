@@ -16,10 +16,11 @@
  */
 
 import {$} from "../../dom.mjs";
-import {getPref, setPref, isTabAllowlisted} from "./utils.mjs";
+import {isTabAllowlisted} from "./utils.mjs";
 
 // remember initial state to better toggle content
 let toggleChecked;
+let lightningChecked;
 
 function setupToggles(tab)
 {
@@ -91,15 +92,23 @@ function setupToggles(tab)
     });
   });
 
-  getPref("lightning_enabled").then((enabled) =>
-  {
-    lightning.setState({checked: enabled}, enabled);
-    lightning.checked = enabled;
-  });
+  browser.runtime.sendMessage({ type: "lightning.isAllowlisted", tab })
+    .then((enabled) =>
+    {
+      lightning.setState({checked: enabled}, enabled);
+      lightning.checked = enabled;
+      lightningChecked = enabled;
+    });
 
   lightning.addEventListener("change", () =>
   {
-    setPref("lightning_enabled", lightning.checked);
+    //document.body.classList.toggle("refresh", lightningChecked !== lightning.checked);
+    browser.runtime.sendMessage({
+      type: "lightning.allowlist",
+      origin: "popup",
+      tab,
+      toAdd: lightning.checked
+    });
   });
 }
 

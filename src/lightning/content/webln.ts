@@ -15,13 +15,14 @@ const weblnCalls = [
 // calls that can be executed when webln is not enabled for the current content page
 const disabledCalls = ["enable", "isEnabled"];
 
-let isEnabled = true; // store if webln is enabled for this content page
+let isEnabled = false; // store if webln is enabled for this content page
 let isRejected = false; // store if the webln enable call failed. if so we do not prompt again
 let nwc: any;
 
 async function init() {
   const lightningEnabled = await browser.runtime.sendMessage({
-    type: "lightning.enabled"
+    type: "lightning.isAllowlisted",
+    hostname: window.location.hostname
   });
   if (!lightningEnabled) {
     return;
@@ -95,6 +96,20 @@ async function init() {
 }
 
 init();
+
+browser.runtime.onMessage.addListener((message) => {
+  if (message.type === "lightning.allowlistUpdated") {
+    if (message.enabled && !nwc) {
+      isEnabled = false;
+      isRejected = false;
+      init();
+    } else if (!message.enabled && nwc) {
+      isEnabled = false;
+      isRejected = false;
+      nwc = undefined;
+    }
+  }
+});
 
 async function injectWebln() {
   try {
