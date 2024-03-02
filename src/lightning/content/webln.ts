@@ -8,6 +8,7 @@ const weblnCalls = [
   "enable",
   "isEnabled",
   "getInfo",
+  "getBalance",
   "sendPayment",
   "makeInvoice",
   "keysend"
@@ -20,17 +21,18 @@ let isRejected = false; // store if the webln enable call failed. if so we do no
 let nwc: any;
 
 async function init() {
+  const secret = await browser.runtime.sendMessage({
+    type: "lightning.secret"
+  });
+  if (!secret) {
+    return;
+  }
+
   const lightningEnabled = await browser.runtime.sendMessage({
     type: "lightning.isAllowlisted",
     hostname: window.location.hostname
   });
   if (!lightningEnabled) {
-    return;
-  }
-  const secret = await browser.runtime.sendMessage({
-    type: "lightning.secret"
-  });
-  if (!secret) {
     return;
   }
 
@@ -66,7 +68,8 @@ async function init() {
       const availableCalls = isEnabled ? weblnCalls : disabledCalls;
       if (!availableCalls.includes(ev.data.action)) {
         console.error("Function not available. Is the provider enabled?");
-        return;
+        postMessage(ev, {error: "Function not available. Is the provider enabled?"});
+        return Promise.resolve();
       }
 
       injectLoaderElement(true);
