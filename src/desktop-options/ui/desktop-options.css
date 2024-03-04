@@ -1757,17 +1757,20 @@ html[dir="rtl"] #content-lightning form button
   text-transform: uppercase;
 }
 
-#custom-filters .io-filter-table-title
+#custom-filters .io-filter-table-title,
+#enabled-lightning-domains .io-lightning-table-title
 {
   font-weight: 600;
 }
 
-html:not([dir="rtl"]) #custom-filters .io-filter-table-title
+html:not([dir="rtl"]) #custom-filters .io-filter-table-title,
+html:not([dir="rtl"]) #enabled-lightning-domains .io-lightning-table-title
 {
   margin-right: 2rem;
 }
 
-html[dir="rtl"] #custom-filters .io-filter-table-title
+html[dir="rtl"] #custom-filters .io-filter-table-title,
+html[dir="rtl"] #enabled-lightning-domains .io-lightning-table-title
 {
   margin-left: 2rem;
 }

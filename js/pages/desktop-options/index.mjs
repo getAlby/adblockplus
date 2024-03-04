@@ -970,11 +970,15 @@ function execAction(action, element)
       saveNwcSecret();
       return true;
     case "remove-enabled-lightning":
+      const domain = findParentData(element, "access", false);
       browser.runtime.sendMessage({
         type: "lightning.allowlist",
-        tab: findParentData(element, "domain", false),
+        domain,
         toAdd: false
       });
+      collections.lightning.removeItem(
+        collections.lightning.items.find(item => item.text === domain)
+      );
       return true;
     case "toggle-remove-subscription":
       const subscriptionUrl = findParentData(element, "access", false);

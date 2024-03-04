@@ -402,14 +402,19 @@
                     data-i18n="options_lightning_save" class="primary" disabled>
             </button>
           </form>
-          <ul id="lightning-table" class="table list">
-            <template>
-              <span data-display></span>
-              <button data-action="remove-enabled-lightning" class="icon delete control"
-                data-i18n-title="options_control_remove_title">
-              </button>
-            </template>
-          </ul>
+          <div id="enabled-lightning-domains">
+            <h3>
+              <span data-i18n="options_lightning_enabled_domains_title" class="io-lightning-table-title"></span>
+            </h3>
+            <ul id="lightning-table" class="table list">
+              <template>
+                <span data-display></span>
+                <button data-action="remove-enabled-lightning" class="icon delete control"
+                  data-i18n-title="options_control_remove_title">
+                </button>
+              </template>
+            </ul>
+          </div>
         </section>
       </div>
 

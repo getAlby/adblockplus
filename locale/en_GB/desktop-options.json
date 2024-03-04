@@ -41,6 +41,9 @@
   "options_customFilters_widget_title": {
     "message": "My filter list"
   },
+  "options_lightning_enabled_domains_title": {
+    "message": "Enabled domains"
+  },
   "options_customize_blockElement": {
     "message": "Show 'Block element' right-click menu item"
   },

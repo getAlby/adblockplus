@@ -86,11 +86,19 @@ export function start() {
    * Allowlists or unallowlists the given domain for Lightning feature.
    *
    * @event "lightning.allowlist"
-   * @property {object} tab
-   *   Tab that contains the page to allowlist.
+   * @property {object} [tab]
+   *  Tab that contains the page to allowlist.
+   * @property {string} [domain]
+   *  Domain to allowlist.
    * @property {boolean} [toAdd]
+   *  Whether to allowlist or unallowlist the domain.
    */
   port.on("lightning.allowlist", async (message) => {
+    if (message.domain) {
+      await setAllowlistedLightningFilters(message.domain, message.toAdd);
+      return;
+    }
+
     const page = new ext.Page(message.tab);
 
     if (!page.url || !(page.url instanceof URL)) throw new Error("Invalid URL");
