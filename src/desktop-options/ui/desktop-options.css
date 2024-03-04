@@ -1732,7 +1732,8 @@ html[dir="rtl"] #content-lightning form button
   margin-right: 0.7rem;
 }
 
-#allowlisting-table li
+#allowlisting-table li,
+#lightning-table li
 {
   padding-right: 1.4rem;
   padding-left: 1.4rem;

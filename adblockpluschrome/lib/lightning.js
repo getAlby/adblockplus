@@ -50,6 +50,16 @@ async function setAllowlistedLightningFilters(host, toAdd) {
 
 export function start() {
   /**
+   * Returns all the allowlisted pages for Lightning feature.
+   *
+   * @event "lightning.getAllowlist"
+   * @returns {string[]}
+   */
+  port.on("lightning.getAllowlist", async () => {
+    return getAllowlistedLightningFilters();
+  });
+
+  /**
    * Checks if the given page has Lightning enabled.
    *
    * @event "lightning.isAllowlisted"

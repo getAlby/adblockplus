@@ -480,6 +480,12 @@ collections.allowlist = new Collection([
     emptyTexts: ["options_allowlist_empty_1", "options_allowlist_empty_2"]
   }
 ]);
+collections.lightning = new Collection([
+  {
+    id: "lightning-table",
+    emptyTexts: ["options_lightning_empty"]
+  }
+]);
 collections.filterLists = new Collection([
   {
     id: "all-filter-lists-table",
@@ -963,6 +969,13 @@ function execAction(action, element)
     case "save-nwc-secret":
       saveNwcSecret();
       return true;
+    case "remove-enabled-lightning":
+      browser.runtime.sendMessage({
+        type: "lightning.allowlist",
+        tab: findParentData(element, "domain", false),
+        toAdd: false
+      });
+      return true;
     case "toggle-remove-subscription":
       const subscriptionUrl = findParentData(element, "access", false);
       if (element.getAttribute("aria-checked") == "true")
@@ -1327,6 +1340,14 @@ function onDOMLoaded()
     $("#lightning-nwc-save-button").disabled = !e.target.value;
   }, false);
 
+  browser.runtime.sendMessage({
+    type: "lightning.getAllowlist"
+  }).then((domains) =>
+  {
+    loadLightningFilters(domains);
+  });
+
+
   // Help tab
   getDoclink("help_center_abp_en").then(link =>
   {
@@ -1430,6 +1451,12 @@ function saveNwcSecret()
   browser.runtime.sendMessage({type: "prefs.set", key: "nwc_pairing_secret", value});
   const text = getMessage("options_lightning_notification");
   showNotification(text, "info");
+}
+
+function loadLightningFilters(domains)
+{
+  for (const domain of domains)
+    collections.lightning.addItem({ text: domain });
 }
 
 function showNotification(text, kind)
