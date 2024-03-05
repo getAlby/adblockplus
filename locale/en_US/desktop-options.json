@@ -267,9 +267,13 @@
     "description": "Save button label for NWC pairing secret",
     "message": "Save"
   },
-  "options_lightning_notification": {
+  "options_lightning_connected_notification": {
     "description": "Notification message for NWC pairing secret save",
     "message": "NWC pairing secret saved."
+  },
+  "options_lightning_disconnected_notification": {
+    "description": "Notification message for NWC pairing secret reset",
+    "message": "NWC pairing secret removed."
   },
   "options_lightning_empty": {
     "description": "Empty text of Lightning feature list of enabled domains",

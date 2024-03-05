@@ -43,6 +43,12 @@ import {
   stripTagsUnsafe
 } from "../../../src/i18n/index.ts";
 
+import {
+  init,
+  onConnected,
+  onDisconnected
+} from "@getalby/bitcoin-connect";
+
 import "../../../src/desktop-options/ui/desktop-options.css";
 import "../../io-filter-table.mjs";
 import "../../io-list-box.mjs";
@@ -86,6 +92,12 @@ const fullDayInMs = 86400000;
 
 convertDoclinks();
 initI18n();
+
+init({
+  appName: 'AdBlocker Plus',
+  filters: ["nwc"],
+  showBalance: false,
+});
 
 const promisedLocaleInfo = browser.runtime.sendMessage({
   type: "app.get",
@@ -1337,12 +1349,6 @@ function onDOMLoaded()
       if (!secret) return;
       $("#lightning-nwc-textbox").value = secret;
     });
-  
-  document.body.addEventListener("keyup", onKeyUp, false);
-  $("#lightning-nwc-textbox").addEventListener("keyup", (e) =>
-  {
-    $("#lightning-nwc-save-button").disabled = !e.target.value;
-  }, false);
 
   browser.runtime.sendMessage({
     type: "lightning.getAllowlist"
@@ -1444,23 +1450,28 @@ function closeDialog()
   focusedBeforeDialog.focus();
 }
 
-function saveNwcSecret()
+async function saveNwcSecret(nostrWalletConnectUrl)
 {
-  const secret = $("#lightning-nwc-textbox");
-  const value = secret.value.trim();
-
-  if (!value)
+  const savedSecret = await getPref("nwc_pairing_secret");
+  if (savedSecret === nostrWalletConnectUrl)
     return;
 
-  browser.runtime.sendMessage({type: "prefs.set", key: "nwc_pairing_secret", value});
-  const text = getMessage("options_lightning_notification");
+  const secret = $("#lightning-nwc-textbox");
+  secret.value = nostrWalletConnectUrl || "";
+
+  browser.runtime.sendMessage({type: "prefs.set", key: "nwc_pairing_secret", value: nostrWalletConnectUrl || ""});
+  const text = getMessage(
+    nostrWalletConnectUrl
+      ? "options_lightning_connected_notification"
+      : "options_lightning_disconnected_notification"
+  );
   showNotification(text, "info");
 }
 
 function loadLightningFilters(domains)
 {
   for (const domain of domains)
-    collections.lightning.addItem({ text: domain });
+    collections.lightning.addItem({text: domain});
 }
 
 function showNotification(text, kind)
@@ -1926,6 +1937,15 @@ api.premium.listen(["changed"]);
 api.subscriptions.listen(["added", "changed", "filtersDisabled", "removed"]);
 
 onDOMLoaded();
+
+onConnected(async (provider) => {
+  const nostrWalletConnectUrl = provider.client.options.nostrWalletConnectUrl;
+  saveNwcSecret(nostrWalletConnectUrl);
+});
+
+onDisconnected(async () => {
+  saveNwcSecret(null);
+});
 
 window.addEventListener("hashchange", onHashChange, false);
 

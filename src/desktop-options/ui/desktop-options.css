@@ -1721,13 +1721,13 @@ html[data-application="opera"] #language-recommend
 }
 
 html:not([dir="rtl"]) #content-allowlist form button,
-html:not([dir="rtl"]) #content-lightning form button
+html:not([dir="rtl"]) #content-lightning form bc-button
 {
   margin-left: 0.7rem;
 }
 
 html[dir="rtl"] #content-allowlist form button,
-html[dir="rtl"] #content-lightning form button
+html[dir="rtl"] #content-lightning form bc-button
 {
   margin-right: 0.7rem;
 }

@@ -63,13 +63,17 @@ export function start() {
    * Checks if the given page has Lightning enabled.
    *
    * @event "lightning.isAllowlisted"
-   * @property {object} tab
+   * @property {object} [tab]
    *  Tab that contains the page to check.
+   * @property {string} [hostname]
+   *  Hostname of the page to check.
    * @returns {boolean}
    */
   port.on("lightning.isAllowlisted", async (message) => {
     let host = message.hostname && message.hostname.replace(/^www\./, "");
-    if (!host) {
+    if (!host && message.tab) {
+      if (!message.tab.id) return false;
+
       const page = new ext.Page(message.tab);
 
       if (!page.url || !(page.url instanceof URL)) return false;
@@ -99,6 +103,7 @@ export function start() {
       return;
     }
 
+    if (message.tab && !message.tab.id) throw new Error("Tab ID is missing");
     const page = new ext.Page(message.tab);
 
     if (!page.url || !(page.url instanceof URL)) throw new Error("Invalid URL");
