@@ -82,7 +82,10 @@ export default {
       path.resolve("lib"),
       path.resolve("build/webext/templates"),
       "node_modules"
-    ]
+    ],
+    alias: {
+      events: path.resolve("node_modules/eventemitter3")
+    }
   },
   resolveLoader: {
     alias: {

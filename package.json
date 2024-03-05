@@ -88,6 +88,7 @@
     "canvas": "2.11.2",
     "css-loader": "6.8.1",
     "del": "5.1.0",
+    "eventemitter3": "5.0.1",
     "events": "3.3.0",
     "glob": "8.0.3",
     "gulp": "4.0.2",
