@@ -94,9 +94,16 @@ convertDoclinks();
 initI18n();
 
 init({
-  appName: 'AdBlocker Plus',
+  appName: 'AdblockPlus',
   filters: ["nwc"],
-  showBalance: false,
+  showBalance: true,
+  providerConfig: {
+    nwc: {
+      authorizationUrlOptions: {
+        requestMethods: ['get_info', 'get_balance', 'make_invoice', 'pay_invoice', 'pay_keysend', 'lookup_invoice'],
+      }
+    }
+  }
 });
 
 const promisedLocaleInfo = browser.runtime.sendMessage({
