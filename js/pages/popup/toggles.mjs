@@ -16,7 +16,8 @@
  */
 
 import {$} from "../../dom.mjs";
-import {isTabAllowlisted} from "./utils.mjs";
+import {isTabAllowlisted, getPref} from "./utils.mjs";
+import {showOptions} from "../../../lib/pages/options.js";
 
 // remember initial state to better toggle content
 let toggleChecked;
@@ -102,12 +103,28 @@ function setupToggles(tab)
 
   lightning.addEventListener("change", () =>
   {
-    //document.body.classList.toggle("refresh", lightningChecked !== lightning.checked);
-    browser.runtime.sendMessage({
-      type: "lightning.allowlist",
-      origin: "popup",
-      tab,
-      toAdd: lightning.checked
+    getPref("nwc_pairing_secret").then((secret) =>
+    {
+      if (!secret && lightning.checked)
+      {
+        showOptions({
+          type: "app.respond",
+          action: "focusSection",
+          args: ["lightning"]
+        }).then(
+          // force closing popup which is not happening in Firefox
+          // @link https://issues.adblockplus.org/ticket/7017
+          () => window.close()
+        );
+        return;
+      }
+
+      browser.runtime.sendMessage({
+        type: "lightning.allowlist",
+        origin: "popup",
+        tab,
+        toAdd: lightning.checked
+      });
     });
   });
 }
